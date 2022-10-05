@@ -1,140 +1,232 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@anderqxr 
+bandeiramgn
+/
+POO_22.2
+Public
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+POO_22.2/Agregação Simples/Grafite/main.cpp
+@bandeiramgn
+bandeiramgn completed graffiti activity
+Latest commit 33b982e 4 hours ago
+ History
+ 1 contributor
+190 lines (163 sloc)  3.69 KB
+
 #include <iostream>
 #include <sstream>
-#include <memory>
+#include <memory>  //sharedptr
+#include <iomanip> //setprecision
+#include <utility> //exchange
 #include <aux.hpp>
 
-class Person {
-    
+class Lead
+{
+    float thickness;
+    std::string hardness;
+    int size;
+
 public:
-    std::string name; //atributo
-    int age;
-    Person(std::string name, int age): name(name), age(age) {
+    Lead(float thickness, std::string hardness, int size) : thickness(thickness), hardness(hardness), size(size)
+    {
+    }
+
+    int usagePerSheet() const
+    {
+        if (getHardness() == "HB") 
+        {
+            return 1;
+        }
+        else if (hardness == "2B")
+        {
+            return 2;
+            
+        }
+        else if (hardness == "4B")
+        {
+            return 4;
+        }
+        else if (hardness == "6B")
+        {
+            return 6;
+        }  
+        return 0;
+    }
         
+    float getThickness() const
+    {
+        return thickness;
     }
 
-    // Person(int age) { //todo Person("", age) {
-    
-    // }
+    std::string getHardness() const
+    {
+        return hardness; 
+    }
 
-    int getAge() {
-        return age;    
+    int getSize() const
+    {
+        return size;
     }
-    
-    std::string getName() {
-        return name;
+
+    void setSize(int size)
+    {
+        this->size = size;
     }
-    std::string str() {
-        std::ostringstream oss;
-        oss << name << ":" << age;
-        return oss.str();
+
+    std::string str() const
+    {
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(1)
+            << thickness << ":" << hardness << ":" << size;
+        return ss.str();
     }
 };
 
-std::ostream& operator<<(std::ostream& os, Person& p) {
-    return os << p.str();
+std::ostream &operator<<(std::ostream &ss, Lead gr)
+{
+    return ss << gr.str();
 }
 
-class Motorcycle {
-    std::shared_ptr<Person> person {nullptr}; //agregação
-    int age {0};
-    int time {0};
-    int power {1};
-    
+struct Pencil
+{
+    float thickness{0.f};
+    std::shared_ptr<Lead> tip{nullptr};
 
-public:
-    Motorcycle(int power = 1) { //todo power {power} {
-    this->power = power;
-    person = nullptr;
-    age = 0;
+    Pencil(float thickness = 0.0) : thickness(thickness), tip(nullptr)
+    {
+
     }
 
+    bool hasGrafite()
+    {
+        if (tip == nullptr)
+            return false;
 
-    bool insertPerson(std::shared_ptr<Person> p) {
-        if(person == nullptr) {
-            this->person = p;
-            return true;
+        return true; 
+    }
+
+    bool insert(std::shared_ptr<Lead> grafite)
+    {
+        if (hasGrafite()){
+            std::cout << "fail: ja existe grafite\n";
+            return false;
         }
-        std::cout << "fail: busy motorcycle\n";
+
+        if (grafite->getThickness() == thickness) 
+        {
+            tip = grafite;
+            return true;
+        } 
+        else 
+        {
+            std::cout << "fail: calibre incompativel\n";
+            return false;
+        }
+
         return false;
     }
 
-    std::string honk() {
-        return "P" + std::string(power, 'e') + "m";
-    }
-
-    std::shared_ptr<Person> removePerson() {
-        if(person != nullptr) {
-            auto aux = this->person;
-            person = nullptr;
-            return aux;
+    std::shared_ptr<Lead> remove() {
+        if (hasGrafite()) 
+        {
+            tip = nullptr;        
         }
-        std::cout << "fail: empty motorcycle\n";
-        return nullptr;
+        else 
+        {
+            std::cout << "fail: não tem grafite\n";
+        } 
+        return {};
     }
 
-    void buyTime(int time) {
-         this->time += time;
-    }
-    
-    
-
-    void drive(int andar) {
-        if(person.get()->getAge() < 10) {
-            if(this->time == 0 ) {
-                std::cout << "fail: buy time first\n";
-                return;
-            }if (andar > time) {
-                std::cout << "fail: time finished after " << time << " minutes\n";
-                time = 0;
-                return;
-            }if(person != nullptr) {
-                this->time -= andar;
-                return;
+    void writePage()
+    {
+        if (!hasGrafite())
+        {
+            std::cout << "fail: nao existe grafite\n";
+        }
+        else if (tip->getSize() <= 10) 
+        {
+            std::cout << "fail: tamanho insuficiente\n";
+        } 
+        else if (hasGrafite())
+        {
+            int useGrafite = tip->usagePerSheet();   
+            if ((tip->getSize() - useGrafite) < 10) 
+            { 
+                tip->setSize(10);
+                std::cout << "fail: folha incompleta\n";
             }
-            return;
-        }if(person.get()->getAge() > 10) {
-            std::cout << "fail: too old to drive\n";
-            return;
+            else 
+            {
+                tip->setSize(tip->getSize() - useGrafite); 
+            }
         }
-      
     }
 
-
-
-    std::string str() const{
-        std::ostringstream os;
-        os << "power:" << power << ", time:" << time;
-        os << ", person:(" << (person == nullptr ? "empty" : person->str()) << ")";
-        return os.str();
+    std::string str()
+    {
+        std::stringstream ss;
+        ss << "calibre: " << thickness << ", grafite: ";
+        if (tip != nullptr)
+            ss << "[" << *tip << "]";
+        else
+            ss << "null";
+        return ss.str();
     }
 };
 
-std::ostream& operator<<(std::ostream& os, const Motorcycle& m) {
-    return os << m.str();
+std::ostream &operator<<(std::ostream &os, Pencil l)
+{
+    return os << l.str();
 }
 
-
-int main() {
+int main()
+{
     aux::Chain chain;
-    aux::Param par;
+    aux::Param ui;
 
-    Motorcycle m(1);
+    Pencil pencil;
 
-
+    auto tofloat = aux::to<float>;
     auto toint = aux::to<int>;
 
-    chain["show"]  = [&]() { aux::show << m; };
-    chain["leave"] = [&]() { 
-        auto person = m.removePerson(); 
-        if (person != nullptr) {
-            aux::show << *person;
-        }
-    };
-    chain["honk"]  = [&]() { aux::show << m.honk(); };
-    chain["init"]  = [&]() { m = Motorcycle(toint(par[1]));};
-    chain["enter"] = [&]() { m.insertPerson(std::make_shared<Person>(par[1], toint(par[2]))); };
-    chain["buy"]   = [&]() { m.buyTime(toint(par[1])); };
-    chain["drive"] = [&]() { m.drive  (toint(par[1])); };
+    chain["show"] = [&]()
+    { std::cout << pencil << std::endl; };
+    chain["init"] = [&]()
+    { pencil = Pencil(tofloat(ui[1])); };
+    chain["insert"] = [&]()
+    { pencil.insert(std::make_shared<Lead>(tofloat(ui[1]), ui[2], toint(ui[3]))); };
+    chain["remove"] = [&]()
+    { pencil.remove(); };
+    chain["write"] = [&]()
+    { pencil.writePage(); };
 
-    aux::execute(chain, par);
+    aux::execute(chain, ui);
 }
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+POO_22.2/main.cpp at main · bandeiramgn/POO_22.2
