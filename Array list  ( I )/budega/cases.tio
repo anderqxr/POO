@@ -1,0 +1,315 @@
+>>>>>>>> iniciar
+init 2
+show
+end
+========
+$init 2
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: []
+$end
+<<<<<<<<
+
+>>>>>>>> arrive
+init 2
+show
+arrive joao
+arrive maria
+arrive ana
+show
+end
+========
+$init 2
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$arrive ana
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: [joao, maria, ana]
+$end
+<<<<<<<<
+
+>>>>>>>> call
+init 2
+show
+arrive joao
+arrive maria
+arrive ana
+show
+call 0
+show
+end
+========
+$init 2
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$arrive ana
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: [joao, maria, ana]
+$call 0
+$show
+Caixas: | 0: joao | 1:----- |
+Espera: [maria, ana]
+$end
+<<<<<<<<
+
+>>>>>>>> finish
+init 2
+show
+arrive joao
+arrive maria
+arrive ana
+show
+call 0
+show
+finish 0
+show
+end
+========
+$init 2
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$arrive ana
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: [joao, maria, ana]
+$call 0
+$show
+Caixas: | 0: joao | 1:----- |
+Espera: [maria, ana]
+$finish 0
+$show
+Caixas: | 0:----- | 1:----- |
+Espera: [maria, ana]
+$end
+<<<<<<<<
+
+>>>>>>>> iniciar2
+init 3
+show
+arrive joao
+arrive maria
+show
+end
+========
+$init 3
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: [joao, maria]
+$end
+<<<<<<<<
+
+>>>>>>>> call
+init 3
+show
+arrive joao
+arrive maria
+show
+call 0
+call 0
+show
+end
+========
+$init 3
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: [joao, maria]
+$call 0
+$call 0
+fail: caixa ocupado
+$show
+Caixas: | 0: joao | 1:----- | 2:----- |
+Espera: [maria]
+$end
+<<<<<<<<
+
+>>>>>>>> empty waiting
+init 3
+show
+arrive joao
+arrive maria
+show
+call 0
+call 0
+show
+call 1
+show
+end
+========
+$init 3
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: [joao, maria]
+$call 0
+$call 0
+fail: caixa ocupado
+$show
+Caixas: | 0: joao | 1:----- | 2:----- |
+Espera: [maria]
+$call 1
+$show
+Caixas: | 0: joao | 1:maria | 2:----- |
+Espera: []
+$end
+<<<<<<<<
+
+>>>>>>>> empty waiting
+init 3
+show
+arrive joao
+arrive maria
+show
+call 0
+call 0
+show
+call 1
+show
+call 2
+end
+========
+$init 3
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: [joao, maria]
+$call 0
+$call 0
+fail: caixa ocupado
+$show
+Caixas: | 0: joao | 1:----- | 2:----- |
+Espera: [maria]
+$call 1
+$show
+Caixas: | 0: joao | 1:maria | 2:----- |
+Espera: []
+$call 2
+fail: sem clientes
+$end
+<<<<<<<<
+
+>>>>>>>> finish
+init 3
+show
+arrive joao
+arrive maria
+show
+call 0
+call 0
+show
+call 1
+show
+call 2
+finish 0
+finish 1
+show
+end
+========
+$init 3
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: [joao, maria]
+$call 0
+$call 0
+fail: caixa ocupado
+$show
+Caixas: | 0: joao | 1:----- | 2:----- |
+Espera: [maria]
+$call 1
+$show
+Caixas: | 0: joao | 1:maria | 2:----- |
+Espera: []
+$call 2
+fail: sem clientes
+$finish 0
+$finish 1
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$end
+<<<<<<<<
+
+>>>>>>>> error
+init 3
+show
+arrive joao
+arrive maria
+show
+call 0
+call 0
+show
+call 1
+show
+call 2
+finish 0
+finish 1
+show
+finish 3
+finish 1
+end
+========
+$init 3
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$arrive joao
+$arrive maria
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: [joao, maria]
+$call 0
+$call 0
+fail: caixa ocupado
+$show
+Caixas: | 0: joao | 1:----- | 2:----- |
+Espera: [maria]
+$call 1
+$show
+Caixas: | 0: joao | 1:maria | 2:----- |
+Espera: []
+$call 2
+fail: sem clientes
+$finish 0
+$finish 1
+$show
+Caixas: | 0:----- | 1:----- | 2:----- |
+Espera: []
+$finish 3
+fail: caixa inexistente
+$finish 1
+fail: caixa vazio
+$end
+<<<<<<<<
