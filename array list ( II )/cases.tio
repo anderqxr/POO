@@ -1,0 +1,152 @@
+>>>>>>>> init 1
+show
+end
+========
+$show
+[]
+$end
+<<<<<<<<
+
+>>>>>>>> init 2
+show
+init 5
+show
+end
+========
+$show
+[]
+$init 5
+$show
+[- - - - -]
+$end
+<<<<<<<<
+
+>>>>>>>> init 3
+show
+init 5
+show
+init 4
+show
+end
+========
+$show
+[]
+$init 5
+$show
+[- - - - -]
+$init 4
+$show
+[- - - -]
+$end
+<<<<<<<<
+
+>>>>>>>> reservas
+init 4
+reservar davi 3232 0
+reservar joao 3131 3
+show
+end
+========
+$init 4
+$reservar davi 3232 0
+$reservar joao 3131 3
+$show
+[davi:3232 - - joao:3131]
+$end
+<<<<<<<<
+
+>>>>>>>> ocupado
+init 4
+reservar davi 3232 0
+reservar joao 3131 3
+show
+reservar rute 3030 0
+end
+========
+$init 4
+$reservar davi 3232 0
+$reservar joao 3131 3
+$show
+[davi:3232 - - joao:3131]
+$reservar rute 3030 0
+fail: cadeira ja esta ocupada
+$end
+<<<<<<<<
+
+>>>>>>>> duplicado
+init 4
+reservar davi 3232 0
+reservar joao 3131 3
+show
+reservar rute 3030 0
+reservar davi 3234 2
+end
+========
+$init 4
+$reservar davi 3232 0
+$reservar joao 3131 3
+$show
+[davi:3232 - - joao:3131]
+$reservar rute 3030 0
+fail: cadeira ja esta ocupada
+$reservar davi 3234 2
+fail: cliente ja esta no cinema
+$end
+<<<<<<<<
+
+>>>>>>>> cadeira invalida
+init 4
+reservar davi 3232 5
+end
+========
+$init 4
+$reservar davi 3232 5
+fail: cadeira nao existe
+$end
+<<<<<<<<
+
+>>>>>>>> cancelamentos
+init 4
+reservar davi 3232 5
+reservar davi 3232 0
+reservar joao 3131 3
+cancelar davi
+show
+end
+========
+$init 4
+$reservar davi 3232 5
+fail: cadeira nao existe
+$reservar davi 3232 0
+$reservar joao 3131 3
+$cancelar davi
+$show
+[- - - joao:3131]
+$end
+<<<<<<<<
+
+>>>>>>>> cancelamentos errado
+init 4
+reservar davi 3232 5
+reservar davi 3232 0
+reservar joao 3131 3
+cancelar davi
+show
+cancelar rita
+show
+end
+========
+$init 4
+$reservar davi 3232 5
+fail: cadeira nao existe
+$reservar davi 3232 0
+$reservar joao 3131 3
+$cancelar davi
+$show
+[- - - joao:3131]
+$cancelar rita
+fail: cliente nao esta no cinema
+$show
+[- - - joao:3131]
+$end
+<<<<<<<<
